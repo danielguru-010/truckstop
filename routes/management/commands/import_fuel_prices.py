@@ -3,6 +3,7 @@ from decimal import Decimal, InvalidOperation
 from pathlib import Path
 
 from django.core.management.base import BaseCommand, CommandError
+from django.conf import settings
 from django.db import transaction
 
 from routes.models import FuelStation
@@ -21,9 +22,16 @@ REQUIRED_COLUMNS = {
 
 class Command(BaseCommand):
     help = "Import fuel prices from the assessment CSV."
+    default_csv_path = settings.BASE_DIR / "data" / "fuel-prices-for-be-assessment.csv"
 
     def add_arguments(self, parser):
-        parser.add_argument("csv_path", type=Path)
+        parser.add_argument(
+            "csv_path",
+            type=Path,
+            nargs="?",
+            default=self.default_csv_path,
+            help="CSV path; defaults to the bundled assessment data.",
+        )
 
     @transaction.atomic
     def handle(self, *args, **options):

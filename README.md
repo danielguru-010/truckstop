@@ -28,7 +28,7 @@ To exercise the API after loading station data:
 
 ```bash
 python manage.py migrate
-python manage.py import_fuel_prices /path/to/fuel-prices-for-be-assessment.csv
+python manage.py import_fuel_prices
 python manage.py geocode_fuel_stations
 ```
 
@@ -52,10 +52,12 @@ Apply the database migration and import the supplied assessment data with:
 
 ```bash
 python manage.py migrate
-python manage.py import_fuel_prices /path/to/fuel-prices-for-be-assessment.csv
+python manage.py import_fuel_prices
 ```
 
-The import is safe to run again: existing station rows are updated rather than duplicated.
+The assessment CSV is bundled at `data/fuel-prices-for-be-assessment.csv`. A different CSV path
+can still be supplied as the command argument. The import is safe to run again: existing station
+rows are updated rather than duplicated.
 
 ## Routing providers
 
