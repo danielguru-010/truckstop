@@ -14,6 +14,14 @@ python manage.py runserver
 
 The initial health endpoint is available at `GET /health/`.
 
+Route planning is available at `POST /route/` with a JSON body such as:
+
+```json
+{"start": "Oklahoma City, OK", "finish": "Dallas, TX"}
+```
+
+The response includes the GeoJSON route, selected fuel stops, total gallons, and total cost.
+
 ## Import fuel prices
 
 Apply the database migration and import the supplied assessment data with:
