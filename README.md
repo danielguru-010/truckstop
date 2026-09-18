@@ -9,6 +9,7 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 python manage.py check
+python manage.py test routes.tests
 python manage.py runserver
 ```
 
@@ -23,8 +24,27 @@ Route planning is available at `POST /route/` with a JSON body such as:
 The response includes the GeoJSON route, selected fuel stops, total gallons, and total cost.
 Validation and provider failures return JSON with an `error` message and machine-readable `code`.
 
+To exercise the API after loading station data:
+
+```bash
+python manage.py migrate
+python manage.py import_fuel_prices /path/to/fuel-prices-for-be-assessment.csv
+python manage.py geocode_fuel_stations
+```
+
+Then send a request with curl or Postman:
+
+```bash
+curl -X POST http://127.0.0.1:8000/route/ \
+	-H 'Content-Type: application/json' \
+	-d '{"start":"Oklahoma City, OK","finish":"Dallas, TX"}'
+```
+
+The `route.geometry` field is GeoJSON and can be rendered directly by mapping clients.
+
 For deployment, set `DJANGO_SECRET_KEY`, `DJANGO_DEBUG`, and `DJANGO_ALLOWED_HOSTS` as
 environment variables. `DJANGO_ALLOWED_HOSTS` accepts a comma-separated list.
+See `.env.example` for the available settings.
 
 ## Import fuel prices
 
@@ -56,3 +76,10 @@ python manage.py geocode_fuel_stations --limit 100
 
 The command skips stations that already have coordinates, can be rerun safely, and waits
 between public Nominatim requests. Run it without `--limit` to process the remaining stations.
+
+## Design notes
+
+- A cold route request makes two geocoding calls and one OSRM routing call.
+- Geocoding and route responses are cached, so repeated requests avoid those provider calls.
+- Fuel planning runs locally against imported station data and assumes a full tank at the start.
+- Stations without coordinates are ignored until the enrichment command processes them.

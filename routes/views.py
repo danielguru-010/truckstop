@@ -10,7 +10,6 @@ def health(request):
     return JsonResponse({"status": "ok"})
 
 
-@require_POST
 def plan_route(request):
     if request.method != "POST":
         return JsonResponse(
