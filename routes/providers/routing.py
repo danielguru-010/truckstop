@@ -23,7 +23,7 @@ class Route:
 
 
 class RoutingError(Exception):
-    """Raised when a routing or geocoding provider cannot answer a request."""
+    """A provider could not return a usable result."""
 
 
 class RoutingProvider:

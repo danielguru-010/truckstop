@@ -37,7 +37,7 @@ class FuelPlan:
 
 
 class FuelOptimizationError(Exception):
-    """Raised when no feasible fuel plan exists for a route."""
+    """The route cannot be completed within the vehicle's range."""
 
 
 def optimize_fuel_stops(

@@ -32,7 +32,7 @@ def _great_circle_miles(first, second):
 
 
 def stations_on_route(route_geometry, stations, corridor_miles=DEFAULT_CORRIDOR_MILES):
-    """Return stations near a GeoJSON route with distance measured along the route."""
+    """Find nearby stations and order them by distance along the route."""
     coordinates = route_geometry.get("coordinates", [])
     if len(coordinates) < 2:
         raise ValueError("Route geometry must contain at least two coordinates")
