@@ -1,11 +1,16 @@
 from unittest.mock import MagicMock, patch
 
+from django.core.cache import cache
 from django.test import SimpleTestCase
 
 from routes.providers.routing import Coordinate, NominatimGeocoder, OsrmRouter, RoutingError
 
 
 class RoutingProviderTests(SimpleTestCase):
+    def tearDown(self):
+        cache.clear()
+        super().tearDown()
+
     @patch("routes.providers.routing.urlopen")
     def test_geocoder_returns_coordinate(self, mocked_urlopen):
         response = MagicMock()
@@ -54,3 +59,17 @@ class RoutingProviderTests(SimpleTestCase):
         with patch("routes.providers.routing.json.load", return_value=[]):
             with self.assertRaises(RoutingError):
                 NominatimGeocoder().geocode("Not a real place")
+
+    @patch("routes.providers.routing.urlopen")
+    def test_geocoder_uses_cached_coordinate(self, mocked_urlopen):
+        response = MagicMock()
+        response.__enter__.return_value = response
+        response.__exit__.return_value = None
+        mocked_urlopen.return_value = response
+
+        with patch("routes.providers.routing.json.load", return_value=[{"lat": "35.2", "lon": "-97.4"}]):
+            first = NominatimGeocoder().geocode("Cached City, OK")
+            second = NominatimGeocoder().geocode("Cached City, OK")
+
+        self.assertEqual(first, second)
+        mocked_urlopen.assert_called_once()

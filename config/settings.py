@@ -42,3 +42,11 @@ GEOCODING_BASE_URL = os.getenv("GEOCODING_BASE_URL", "https://nominatim.openstre
 ROUTING_BASE_URL = os.getenv("ROUTING_BASE_URL", "https://router.project-osrm.org")
 ROUTING_TIMEOUT_SECONDS = float(os.getenv("ROUTING_TIMEOUT_SECONDS", "10"))
 ROUTING_USER_AGENT = os.getenv("ROUTING_USER_AGENT", "truckstop-fuel-planner/1.0")
+ROUTING_CACHE_TTL_SECONDS = int(os.getenv("ROUTING_CACHE_TTL_SECONDS", "3600"))
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "truckstop-route-cache",
+    }
+}
