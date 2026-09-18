@@ -55,9 +55,18 @@ class Command(BaseCommand):
                     "state": row["State"].strip().upper(),
                     "rack_id": row["Rack ID"].strip(),
                 }
+                coordinates = {}
+                if row.get("Latitude") and row.get("Longitude"):
+                    try:
+                        coordinates = {
+                            "latitude": float(row["Latitude"]),
+                            "longitude": float(row["Longitude"]),
+                        }
+                    except ValueError:
+                        raise CommandError(f"Invalid coordinates on CSV line {line_number}")
                 _, created = FuelStation.objects.update_or_create(
                     **identity,
-                    defaults={"retail_price": price},
+                    defaults={"retail_price": price, **coordinates},
                 )
                 imported += created
                 updated += not created

@@ -9,6 +9,8 @@ class FuelStation(models.Model):
     state = models.CharField(max_length=2)
     rack_id = models.CharField(max_length=32)
     retail_price = models.DecimalField(max_digits=7, decimal_places=4)
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
 
     class Meta:
         constraints = [
@@ -27,6 +29,7 @@ class FuelStation(models.Model):
         indexes = [
             models.Index(fields=["state", "city"]),
             models.Index(fields=["retail_price"]),
+            models.Index(fields=["latitude", "longitude"]),
         ]
 
     def __str__(self):

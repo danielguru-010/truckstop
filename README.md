@@ -30,3 +30,6 @@ The import is safe to run again: existing station rows are updated rather than d
 The API uses Nominatim for US location geocoding and the public OSRM service for driving routes.
 Both provider URLs, the request timeout, and the required User-Agent can be configured with
 `GEOCODING_BASE_URL`, `ROUTING_BASE_URL`, `ROUTING_TIMEOUT_SECONDS`, and `ROUTING_USER_AGENT`.
+
+Fuel stations with latitude and longitude are matched to the route within a 25-mile corridor.
+The importer accepts optional `Latitude` and `Longitude` columns for enriched station data.
