@@ -13,3 +13,14 @@ python manage.py runserver
 ```
 
 The initial health endpoint is available at `GET /health/`.
+
+## Import fuel prices
+
+Apply the database migration and import the supplied assessment data with:
+
+```bash
+python manage.py migrate
+python manage.py import_fuel_prices /path/to/fuel-prices-for-be-assessment.csv
+```
+
+The import is safe to run again: existing station rows are updated rather than duplicated.
