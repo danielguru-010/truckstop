@@ -43,3 +43,12 @@ by default, so repeated requests for the same locations do not call the public s
 
 Fuel stations with latitude and longitude are matched to the route within a 25-mile corridor.
 The importer accepts optional `Latitude` and `Longitude` columns for enriched station data.
+
+For the supplied CSV, enrich stations before serving route requests:
+
+```bash
+python manage.py geocode_fuel_stations --limit 100
+```
+
+The command skips stations that already have coordinates, can be rerun safely, and waits
+between public Nominatim requests. Run it without `--limit` to process the remaining stations.
