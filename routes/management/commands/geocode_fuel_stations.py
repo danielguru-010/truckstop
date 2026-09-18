@@ -43,9 +43,20 @@ class Command(BaseCommand):
         for index, station in enumerate(stations):
             if index:
                 time.sleep(delay)
-            location = f"{station.address}, {station.city}, {station.state}, USA"
+            locations = [
+                f"{station.address}, {station.city}, {station.state}, USA",
+                f"{station.city}, {station.state}, USA",
+            ]
             try:
-                coordinate = geocoder.geocode(location)
+                coordinate = None
+                for location in locations:
+                    try:
+                        coordinate = geocoder.geocode(location)
+                        break
+                    except RoutingError:
+                        continue
+                if coordinate is None:
+                    raise RoutingError("No location result for address or city")
             except RoutingError as exc:
                 failed += 1
                 self.stderr.write(f"Could not geocode station {station.id}: {exc}")

@@ -74,8 +74,9 @@ For the supplied CSV, enrich stations before serving route requests:
 python manage.py geocode_fuel_stations --limit 100
 ```
 
-The command skips stations that already have coordinates, can be rerun safely, and waits
-between public Nominatim requests. Run it without `--limit` to process the remaining stations.
+The command skips stations that already have coordinates, retries highway-style addresses
+with a `City, State` lookup, can be rerun safely, and waits between public Nominatim requests.
+Run it without `--limit` to process the remaining stations.
 
 ## Design notes
 
