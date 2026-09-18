@@ -21,6 +21,10 @@ Route planning is available at `POST /route/` with a JSON body such as:
 ```
 
 The response includes the GeoJSON route, selected fuel stops, total gallons, and total cost.
+Validation and provider failures return JSON with an `error` message and machine-readable `code`.
+
+For deployment, set `DJANGO_SECRET_KEY`, `DJANGO_DEBUG`, and `DJANGO_ALLOWED_HOSTS` as
+environment variables. `DJANGO_ALLOWED_HOSTS` accepts a comma-separated list.
 
 ## Import fuel prices
 

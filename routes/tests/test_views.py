@@ -5,6 +5,13 @@ from django.test import SimpleTestCase
 
 
 class RouteViewTests(SimpleTestCase):
+    def test_rejects_non_post_requests_with_json_error(self):
+        response = self.client.get("/route/")
+
+        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.json()["code"], "method_not_allowed")
+        self.assertEqual(response["Allow"], "POST")
+
     def test_rejects_invalid_json(self):
         response = self.client.post(
             "/route/", data="not-json", content_type="application/json"
@@ -12,6 +19,7 @@ class RouteViewTests(SimpleTestCase):
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json()["error"], "Request body must be valid JSON")
+        self.assertEqual(response.json()["code"], "invalid_json")
 
     def test_requires_start_and_finish(self):
         response = self.client.post(
